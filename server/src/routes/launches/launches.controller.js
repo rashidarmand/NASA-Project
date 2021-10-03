@@ -7,12 +7,7 @@ function httpGetAllLaunches(req, res) {
 function httpAddNewLaunch(req, res) {
   const launch = req.body;
 
-  const requiredLaunchDetails = [
-    'mission',
-    'rocket',
-    'launchDate',
-    'destination',
-  ];
+  const requiredLaunchDetails = ['mission', 'rocket', 'launchDate', 'target'];
   const missingLaunchDetails = requiredLaunchDetails.filter((detail) => {
     const launchInput = Object.entries(launch);
     return (
