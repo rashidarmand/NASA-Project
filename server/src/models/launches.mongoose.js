@@ -19,7 +19,6 @@ const LaunchesSchema = new Schema({
   },
   target: {
     type: String,
-    required: true,
   },
   customers: {
     type: [String],
