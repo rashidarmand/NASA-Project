@@ -5,21 +5,9 @@ const planets = require('./planets.mongoose');
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 
-const launch = {
-  flightNumber: DEFAULT_FLIGHT_NUMBER, // flight_number
-  mission: 'Kepler Exploration X', // name
-  rocket: 'Explorer IS1', // rocket.name
-  launchDate: new Date('December 27, 2030'), // date_local
-  target: 'Kepler-442 b', // n/a
-  customers: ['ZTM', 'NASA'], // payloads.customers for each payload
-  upcoming: true, // upcoming
-  success: true, // success
-};
-
-saveLaunch(launch); // Seed DB
-
 const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query';
 
+// Seed DB
 async function populateLaunches() {
   console.log('Downloading Launch Data...');
   const res = await axios.post(SPACEX_API_URL, {
@@ -86,8 +74,12 @@ async function getLatestFlightNumber() {
   return latestLaunch.flightNumber;
 }
 
-async function getAllLaunches() {
-  return await launches.find({}, { _id: 0, __v: 0 });
+async function getAllLaunches(skip, limit) {
+  return await launches
+    .find({}, { _id: 0, __v: 0 })
+    .sort({ flightNumber: 'asc' })
+    .skip(skip)
+    .limit(limit);
 }
 
 async function saveLaunch(launch) {
