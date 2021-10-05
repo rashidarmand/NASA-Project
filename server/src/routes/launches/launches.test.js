@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../../app.js');
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo');
 
+const API_VERSION = '/v1';
+
 describe('Launches API', () => {
   beforeAll(async () => {
     await mongoConnect({ testing: true });
@@ -14,7 +16,7 @@ describe('Launches API', () => {
   describe('GET /launches', () => {
     test('It should respond with 200 success', async () => {
       await request(app)
-        .get('/launches')
+        .get(`${API_VERSION}/launches`)
         .expect('Content-Type', /json/)
         .expect(200);
     });
@@ -36,7 +38,7 @@ describe('Launches API', () => {
 
     test('It should respond with 201 created', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(`${API_VERSION}/launches`)
         .send(completeLaunchData)
         .expect('Content-Type', /json/)
         .expect(201);
@@ -50,7 +52,7 @@ describe('Launches API', () => {
 
     test('It should catch missing launch details', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(`${API_VERSION}/launches`)
         .send(launchDataWithoutDate)
         .expect('Content-Type', /json/)
         .expect(400);
@@ -63,7 +65,7 @@ describe('Launches API', () => {
 
     test('It should catch invalid dates', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(`${API_VERSION}/launches`)
         .send({ ...launchDataWithoutDate, launchDate: 'peanuts' })
         .expect('Content-Type', /json/)
         .expect(400);
