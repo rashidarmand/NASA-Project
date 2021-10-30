@@ -15,7 +15,8 @@ RUN npm run build --prefix client
 
 COPY server/ server/
 
-USER node # restrict user to only privliges grant to node user
+# restrict user to only priviliges granted to a node user
+USER node
 
 CMD [ "npm", "start", "--prefix", "server" ]
 
