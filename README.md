@@ -29,3 +29,4 @@ To complete this mission, I built a NASA mission control dashboard to schedule m
 - API integration tests via Jest + SuperTest
 - CI-CD pipeline set up with Github Actions
 - Deployed dockerized application to Linux Amazon EC2 instance
+- Set up valid TLS certificate via LetsEncrypt on EC2 instance
