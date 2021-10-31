@@ -8,23 +8,25 @@ const API_VERSION = '/v1';
 describe('Launches API', () => {
   beforeAll(async () => {
     await mongoConnect({ testing: true });
-		await loadPlanetsData();
+    await loadPlanetsData();
   });
 
   afterAll(async () => {
     await mongoDisconnect();
   });
 
-  describe('GET /launches', () => {
-    test('It should respond with 200 success', async () => {
-      await request(app)
+  describe('Get Launches', () => {
+    test('It should respond with 200 success and return a list of launches', async () => {
+      const response = await request(app)
         .get(`${API_VERSION}/launches`)
         .expect('Content-Type', /json/)
         .expect(200);
+
+      expect(response.body).toBeInstanceOf(Array);
     });
   });
 
-  describe('POST /launches', () => {
+  describe('Add New Launch', () => {
     const completeLaunchData = {
       mission: 'Zero Dark Thirty',
       rocket: 'NSD 1221-b',
@@ -75,6 +77,26 @@ describe('Launches API', () => {
       expect(response.body).toStrictEqual({
         error: 'Invalid Launch Date.',
       });
+    });
+  });
+
+  describe('Delete Launch', () => {
+    test('It should respond with 200 success', async () => {
+      const response = await request(app)
+        .delete(`${API_VERSION}/launches/${101}`)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(response.body).toMatchObject({ ok: true });
+    });
+
+    test('It should return a 404 if id is not found', async () => {
+      const response = await request(app)
+        .delete(`${API_VERSION}/launches/${999}`)
+        .expect('Content-Type', /json/)
+        .expect(404);
+
+      expect(response.body).toMatchObject({ error: 'Launch Not found.' });
     });
   });
 });

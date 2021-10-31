@@ -103,7 +103,7 @@ async function abortLaunch(id) {
     { upcoming: false, success: false }
   );
 
-  return aborted.acknowledged === true && aborted.modifiedCount === 1;
+  return aborted.acknowledged === true && (aborted.modifiedCount === 1 || aborted.matchedCount === 1);
 }
 
 module.exports = {
